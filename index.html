@@ -502,6 +502,44 @@
       html { scroll-behavior: auto; }
     }
     html { scroll-behavior: smooth; }
+
+    /* ===== OPCIÓN A · ARENA Y OLA (solo tema claro) ===== */
+    [data-theme='light'] {
+      --color-bg: #f6efe3;
+      --color-surface: #fffaf2;
+      --color-surface-2: #fbf5ea;
+      --color-surface-offset: #efe5d3;
+      --color-divider: #e2d4bd;
+      --color-text: #0b2a4a;
+      --color-text-muted: #5b6b7a;
+      --color-primary: #002f74;
+    }
+    /* Curvas de profundidad muy suaves sobre la arena */
+    [data-theme='light'] .app {
+      background-color: #f6efe3;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='640' height='640'><g fill='none' stroke='%23002f74' stroke-opacity='0.06' stroke-width='1.4'><path d='M0 120 C160 60 270 185 430 112 S600 84 640 96'/><path d='M0 300 C170 236 300 350 470 276 S600 258 640 268'/><path d='M0 480 C160 420 290 540 450 468 S600 450 640 462'/></g></svg>");
+      background-size: 640px 640px;
+    }
+    /* Ola en el borde inferior de la cabecera */
+    [data-theme='light'] .header { position: relative; margin-bottom: 2.4rem; }
+    [data-theme='light'] .header::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -22px;
+      height: 22px;
+      background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'><path d='M0 22 Q150 4 300 22 T600 22 T900 22 T1200 22 V40 H0 Z' fill='%23002f74' fill-opacity='0.9'/></svg>") no-repeat center / 100% 100%;
+      pointer-events: none;
+    }
+    /* Tarjetas cálidas y más redondeadas */
+    [data-theme='light'] .card {
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(120, 80, 30, 0.08);
+    }
+    /* Banner de estado con acento lateral, como una señal de la costa */
+    [data-theme='light'] .status-banner {
+      border-radius: 20px;
+      border-left-width: 6px;
+    }
   </style>
 </head>
 <body>
