@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#002f74" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Marine Monitor" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <title>Marine Monitor · Dashboard Marítimo Costa Valenciana</title>
   <link rel="icon" type="image/png" href="mmclub-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -173,12 +179,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
       height: 36px;
       border-radius: var(--radius-md);
       background: var(--color-surface-offset);
       color: var(--color-text-muted);
       transition: all var(--transition);
+    }
+    
+    .windy-link {
+      width: auto;
+      padding: 0 0.5rem;
+    }
+    
+    .theme-toggle {
+      width: 36px;
     }
 
     .theme-toggle:hover, .windy-link:hover {
@@ -250,9 +264,9 @@
     /* === Status Banner === */
     .status-banner {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 1rem;
-      padding: 1.25rem 1.5rem;
+      padding: 1.5rem;
       border-radius: var(--radius-lg);
       margin-bottom: 1.5rem;
       background: var(--color-surface);
@@ -422,6 +436,7 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>
           </svg>
+          <span style="margin-left: 0.25rem; font-size: 0.8rem;">Windy</span>
         </a>
         <button class="theme-toggle" data-theme-toggle aria-label="Cambiar tema">
           <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -451,6 +466,7 @@
           <option value="castellon">Castellón</option>
           <option value="valencia">Valencia</option>
           <option value="alicante">Alicante</option>
+          <option value="murcia">Murcia</option>
         </select>
       </div>
 
@@ -459,6 +475,19 @@
         <select id="beachSelect" disabled>
           <option value="">-- Selecciona playa --</option>
         </select>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-left: 1rem; flex: 1;">
+        <span class="province-label" style="margin-left: 0; white-space: nowrap;">Rango análisis:</span>
+        <div class="select-wrapper" style="flex: 1;">
+          <select id="rangeSelect">
+            <option value="1">Próximas 24h</option>
+            <option value="2" selected>Próximas 48h</option>
+            <option value="3">Próximos 3 días</option>
+            <option value="5">Próximos 5 días</option>
+            <option value="7">7 días completos</option>
+          </select>
+        </div>
       </div>
 
       <div style="display: flex; align-items: center; gap: 0.5rem; margin-left: 1rem; flex: 1;">
@@ -476,7 +505,7 @@
         </div>
       </div>
     </div>
-    <div id="activityInfo" style="background: var(--color-surface-offset); border: 1px solid var(--color-divider); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.8125rem; color: var(--color-text-muted);">
+    <div id="activityInfo" style="background: var(--color-surface-offset); border: 1px solid var(--color-divider); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.95rem; color: var(--color-text-muted);">
       <strong id="activityTitle" style="color: var(--color-primary);">🏄 Paddle Surf</strong>
       <span id="activityCondition"> - Requisitos: Oleaje 0.5-2m, Viento &lt;15 km/h, Visibilidad &gt;5km</span>
     </div>
@@ -488,8 +517,21 @@
       </div>
       <div class="status-content">
         <h2 id="statusTitle" class="status-title">Cargando condiciones…</h2>
+        <p id="statusTimestamp" style="font-size: 0.75rem; color: var(--color-text-muted); margin: 0.25rem 0;">-</p>
         <p id="statusDetail" class="status-detail">Selecciona una playa para ver los datos meteorológicos</p>
+        <p id="statusReasons" style="font-size: 0.8rem; color: var(--color-text-muted); margin-top: 0.5rem;">-</p>
       </div>
+    </section>
+
+    <!-- Mejores franjas -->
+    <section class="card" id="bestWindowsCard" style="margin-bottom: 1.5rem;">
+      <div class="card-header">
+        <span class="card-title">Mejores franjas en el rango elegido</span>
+      </div>
+      <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">
+        Ordenadas por estado y por cercanía al centro del rango ideal de viento. Es orientativo: una buena puntuación no garantiza la seguridad.
+      </p>
+      <ul id="bestWindowsList" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem;"></ul>
     </section>
 
     <!-- Current Conditions Cards -->
@@ -601,6 +643,31 @@
     </section>
 
     <!-- Footer -->
+    <!-- Puntos de salida -->
+    <section class="card" id="launchCard" style="margin-bottom: 1.5rem;">
+      <div class="card-header">
+        <span style="font-size: 1.1rem;">⚓</span>
+        <span class="card-title">Puntos de salida</span>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 0.75rem;">
+        Guarda calas y accesos desde los que sales. Se guardan en este navegador y en este dispositivo.
+      </p>
+      <div style="display: grid; gap: 0.5rem; margin-bottom: 0.75rem;">
+        <input id="launchName" type="text" maxlength="80" placeholder="Nombre (ej. Cala del Moraig, bajada norte)"
+          style="padding: 0.5rem 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--color-divider); background: var(--color-surface); color: var(--color-text); font-size: 0.875rem;" />
+        <input id="launchUrl" type="url" maxlength="500" placeholder="Enlace (Google Maps u otro) — opcional"
+          style="padding: 0.5rem 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--color-divider); background: var(--color-surface); color: var(--color-text); font-size: 0.875rem;" />
+        <input id="launchNotes" type="text" maxlength="200" placeholder="Notas (acceso, parking, rompiente, orientación…) — opcional"
+          style="padding: 0.5rem 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--color-divider); background: var(--color-surface); color: var(--color-text); font-size: 0.875rem;" />
+        <button id="launchAdd" type="button"
+          style="padding: 0.5rem 0.75rem; border-radius: var(--radius-md); border: none; background: var(--color-primary); color: #fff; font-weight: 600; cursor: pointer; font-size: 0.875rem;">
+          Guardar punto de salida
+        </button>
+      </div>
+      <p id="launchMsg" style="font-size: 0.8rem; color: var(--color-no-go); min-height: 1rem; margin-bottom: 0.5rem;"></p>
+      <ul id="launchList" style="list-style: none; padding: 0; margin: 0; display: grid; gap: 0.5rem;"></ul>
+    </section>
+
     <footer class="footer">
       <p>Datos: <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a> · Pronósticos interactivos: <a href="https://windy.com" target="_blank" rel="noopener">Windy.com</a> · Actualización automática cada 10 min</p>
       <p class="footer-loc" id="footerLoc">Selecciona una playa · Zona horaria: Europe/Madrid</p>
@@ -616,79 +683,126 @@
 
     const LOCATIONS = {
       castellon: [
-        { id: 'alcala', name: 'Alcalá de Xivert', lat: 40.4214, lon: 0.3356, region: 'Alcalá de Xivert' },
-        { id: 'peiscola', name: 'Peñíscola', lat: 40.3605, lon: 0.3922, region: 'Peñíscola' },
-        { id: 'benicarlobenicassim', name: 'Benicàssim', lat: 40.3753, lon: 0.0779, region: 'Benicàssim' },
+        { id: 'alcala', name: 'Alcalá de Xivert', lat: 40.4214, lon: 0.3356, region: 'Alcalá de Xivert', seaFacing: 100 },
+        { id: 'peiscola', name: 'Peñíscola', lat: 40.3605, lon: 0.3922, region: 'Peñíscola', seaFacing: 90 },
+        { id: 'benicarlobenicassim', name: 'Benicàssim', lat: 40.3753, lon: 0.0779, region: 'Benicàssim', seaFacing: 100 },
       ],
       valencia: [
-        { id: 'pobla', name: 'La Pobla de Farnals', lat: 39.5643, lon: -0.2834, region: 'La Pobla de Farnals' },
-        { id: 'cullera', name: 'Cullera', lat: 39.1646, lon: -0.2406, region: 'Cullera' },
-        { id: 'gandia', name: 'Gandia', lat: 39.0060, lon: -0.1728, region: 'Gandia' },
-        { id: 'oliva', name: 'Oliva', lat: 38.9356, lon: -0.0988, region: 'Oliva' },
+        { id: 'canet', name: 'Canet d’En Berenguer', lat: 39.636, lon: -0.21, region: 'Canet d’En Berenguer', seaFacing: 90 },
+        { id: 'pobla', name: 'La Pobla de Farnals', lat: 39.5643, lon: -0.2834, region: 'La Pobla de Farnals', seaFacing: 90 },
+        { id: 'patacona', name: 'La Patacona', lat: 39.529, lon: -0.3195, region: 'Alboraia', seaFacing: 90 },
+        { id: 'malvarrosa', name: 'La Malvarrosa', lat: 39.4773, lon: -0.326, region: 'València', seaFacing: 90 },
+        { id: 'pinedo', name: 'Pinedo', lat: 39.412, lon: -0.324, region: 'València', seaFacing: 100 },
+        { id: 'saler', name: 'El Saler', lat: 39.371, lon: -0.3152, region: 'València', seaFacing: 90 },
+        { id: 'perello', name: 'El Perelló', lat: 39.3, lon: -0.299, region: 'El Perelló', seaFacing: 90 },
+        { id: 'cullera', name: 'Cullera', lat: 39.1646, lon: -0.2406, region: 'Cullera', seaFacing: 100 },
+        { id: 'piles', name: 'Piles', lat: 38.9725, lon: -0.149, region: 'Piles', seaFacing: 100 },
+        { id: 'gandia', name: 'Gandia', lat: 39.006, lon: -0.1728, region: 'Gandia', seaFacing: 100 },
+        { id: 'oliva', name: 'Oliva', lat: 38.9356, lon: -0.0988, region: 'Oliva', seaFacing: 100 },
       ],
       alicante: [
-        { id: 'denia', name: 'Dénia', lat: 38.8408, lon: 0.1057, region: 'Dénia' },
-        { id: 'calpe', name: 'Calpe', lat: 38.6418, lon: 0.0542, region: 'Calpe' },
-        { id: 'capblanc', name: 'Cap Blanc', lat: 38.6743, lon: 0.1136, region: 'Moraira' },
-        { id: 'teulada', name: 'Teulada', lat: 38.6881, lon: 0.1345, region: 'Moraira' },
-        { id: 'portet', name: 'El Portet', lat: 38.6872, lon: 0.1463, region: 'Moraira' },
-        { id: 'moraig', name: 'Cala del Moraig', lat: 38.7094, lon: 0.1669, region: 'Benitachell' },
-        { id: 'granadella', name: 'Cala Granadella', lat: 38.7297, lon: 0.1970, region: 'Xàbia' },
-        { id: 'capnegre', name: 'Cap Negre', lat: 38.7453, lon: 0.2319, region: 'Xàbia' },
-        { id: 'lacaleta', name: 'La Caleta', lat: 38.7617, lon: 0.2066, region: 'Xàbia' },
-        { id: 'portitxol', name: 'El Portitxol', lat: 38.7545, lon: 0.2241, region: 'Xàbia' },
-        { id: 'xabia', name: 'Xàbia (Arenal)', lat: 38.7732, lon: 0.1908, region: 'Xàbia' },
+        { id: 'denia', name: 'Dénia', lat: 38.8408, lon: 0.1057, region: 'Dénia', seaFacing: 100 },
+        { id: 'xabia', name: 'Xàbia (Arenal)', lat: 38.7732, lon: 0.1908, region: 'Xàbia', seaFacing: 100 },
+        { id: 'lacaleta', name: 'La Caleta', lat: 38.7617, lon: 0.2066, region: 'Xàbia', seaFacing: 60 },
+        { id: 'portitxol', name: 'El Portitxol', lat: 38.7545, lon: 0.2241, region: 'Xàbia', seaFacing: 130 },
+        { id: 'capnegre', name: 'Cap Negre', lat: 38.7453, lon: 0.2319, region: 'Xàbia', seaFacing: 90 },
+        { id: 'granadella', name: 'Cala Granadella', lat: 38.7297, lon: 0.197, region: 'Xàbia', seaFacing: 110 },
+        { id: 'moraig', name: 'Cala del Moraig', lat: 38.7094, lon: 0.1669, region: 'Benitachell', seaFacing: 120 },
+        { id: 'teulada', name: 'Teulada', lat: 38.6881, lon: 0.1345, region: 'Moraira', seaFacing: 120 },
+        { id: 'portet', name: 'El Portet', lat: 38.6872, lon: 0.1463, region: 'Moraira', seaFacing: 120 },
+        { id: 'capblanc', name: 'Cap Blanc', lat: 38.6743, lon: 0.1136, region: 'Moraira', seaFacing: 110 },
+        { id: 'calpe', name: 'Calpe', lat: 38.6418, lon: 0.0542, region: 'Calpe', seaFacing: 110 },
+        { id: 'altea', name: 'Altea', lat: 38.5991, lon: -0.052, region: 'Altea', seaFacing: 130 },
+        { id: 'benidorm_poniente', name: 'Benidorm (Poniente)', lat: 38.538, lon: -0.144, region: 'Benidorm', seaFacing: 150 },
+        { id: 'benidorm_levante', name: 'Benidorm (Levante)', lat: 38.5345, lon: -0.129, region: 'Benidorm', seaFacing: 120 },
+        { id: 'villajoyosa', name: 'Villajoyosa', lat: 38.5071, lon: -0.2325, region: 'Villajoyosa', seaFacing: 130 },
+        { id: 'elcampello', name: 'El Campello (San Gabriel)', lat: 38.433, lon: -0.41, region: 'El Campello', seaFacing: 120 },
+        { id: 'sanjuan', name: 'San Juan', lat: 38.3755, lon: -0.455, region: 'Alicante', seaFacing: 110 },
+        { id: 'postiguet', name: 'Postiguet', lat: 38.3455, lon: -0.484, region: 'Alicante', seaFacing: 110 },
+        { id: 'santapola', name: 'Santa Pola', lat: 38.193, lon: -0.546, region: 'Santa Pola', seaFacing: 110 },
+        { id: 'guardamar', name: 'Guardamar del Segura', lat: 38.093, lon: -0.652, region: 'Guardamar del Segura', seaFacing: 110 },
+        { id: 'zenia', name: 'La Zenia', lat: 38.0, lon: -0.717, region: 'Orihuela Costa', seaFacing: 130 },
+        { id: 'caboroig', name: 'Cabo Roig', lat: 37.9967, lon: -0.7326, region: 'Orihuela Costa', seaFacing: 130 },
+        { id: 'torrevieja', name: 'Torrevieja (Playa del Cura)', lat: 37.981, lon: -0.679, region: 'Torrevieja', seaFacing: 120 },
+        { id: 'pilar', name: 'Mil Palmeras', lat: 37.86, lon: -0.785, region: 'Pilar de la Horadada', seaFacing: 110 },
+      ],
+      murcia: [
+        { id: 'manga_med', name: 'La Manga (Mediterráneo)', lat: 37.628, lon: -0.712, region: 'La Manga del Mar Menor', seaFacing: 90 },
+        { id: 'manga_menor', name: 'La Manga (Mar Menor)', lat: 37.633, lon: -0.742, region: 'La Manga del Mar Menor', seaFacing: 270 },
+        { id: 'cabopalos', name: 'Cabo de Palos', lat: 37.636, lon: -0.687, region: 'Cabo de Palos', seaFacing: 120 },
+        { id: 'calblanque', name: 'Calblanque', lat: 37.578, lon: -0.7, region: 'Cartagena', seaFacing: 120 },
+        { id: 'mazarron', name: 'Mazarrón', lat: 37.593, lon: -1.265, region: 'Mazarrón', seaFacing: 130 },
+        { id: 'aguilas', name: 'Águilas (El Hornillo)', lat: 37.405, lon: -1.583, region: 'Águilas', seaFacing: 150 },
       ]
     };
 
+    // Criterios (km/h; 1 kn = 1,852 km/h)
+    // windMin: viento mínimo para practicar (por debajo -> precaución)
+    // windCaution: hasta aquí viento ideal; por encima -> precaución
+    // windThreshold: por encima -> no apto
+    // waveMax: oleaje por encima -> precaución; waveNoGo: por encima -> no apto
+    // visibilityThreshold: visibilidad atmosférica mínima (proxy, ver nota)
     const ACTIVITIES = {
       paddlesurf: {
         name: '🏄 Paddle Surf',
-        windThreshold: 15,
+        windCaution: 18,        // ≈10 kn (paddlers principiantes ≤10 kn)
+        windThreshold: 28,      // ≈15 kn (rompientes/olas cortas a partir de 15 kn)
         visibilityThreshold: 5,
-        waveMin: 0.5,
-        waveMax: 2.0,
-        info: 'Condiciones ideales: Oleaje 0.5-2m, Viento <15 km/h, Visibilidad >5km'
+        waveMax: 0.5,           // principiantes <0,5 m
+        waveNoGo: 1.0,
+        offshoreCaution: 10,    // viento de tierra a mar: ≈5 kn
+        offshoreNoGo: 18,       // ≈10 kn offshore: peligroso para paddlers
+        info: 'Ideal: viento <18 km/h (≈10 kn), oleaje <0,5 m, visibilidad >5 km · Offshore: precaución >10 km/h, no apto >18 km/h · Precaución: viento 18–28 km/h u oleaje 0,5–1 m · No apto: viento >28 km/h (≈15 kn) u oleaje >1 m'
       },
       windsurf: {
         name: '🪁 Windsurf',
-        windThreshold: 30,
+        windMin: 22,            // ≈12 kn (planeo con equipo grande)
+        windCaution: 46,        // ≈25 kn (rango intermedio 15–25 kn)
+        windThreshold: 65,      // ≈35 kn
         visibilityThreshold: 8,
-        windMin: 12,
-        waveMin: 1.0,
-        waveMax: 3.0,
-        info: 'Condiciones ideales: Viento 12-25 km/h, Oleaje 1-3m, Visibilidad >8km'
+        waveMax: 2.0,
+        waveNoGo: 3.0,
+        offshoreCaution: 22,    // offshore con viento de planeo: precaución
+        offshoreNoGo: 40,       // offshore fuerte: no apto
+        info: 'Ideal: viento 22–46 km/h (12–25 kn), oleaje <2 m, visibilidad >8 km · Offshore: precaución >22 km/h, no apto >40 km/h · Precaución: viento <22 o >46 km/h u oleaje 2–3 m · No apto: viento >65 km/h (≈35 kn) u oleaje >3 m'
       },
       kitesurf: {
         name: '🪁🪂 Kite Surf',
-        windThreshold: 35,
+        windMin: 20,            // ≈11 kn (kite grande; principiantes 12–20 kn)
+        windCaution: 46,        // ≈25 kn
+        windThreshold: 65,      // ≈35 kn (experimentados hasta ~40 kn)
         visibilityThreshold: 8,
-        windMin: 14,
-        waveMin: 0.5,
-        waveMax: 2.5,
-        info: 'Condiciones ideales: Viento 14-30+ km/h (fuerte), Oleaje 0.5-2.5m, Visibilidad >8km'
+        waveMax: 2.0,
+        waveNoGo: 2.5,
+        info: 'Ideal: viento 20–46 km/h (11–25 kn), oleaje <2 m, visibilidad >8 km · Precaución: viento <20 o >46 km/h u oleaje 2–2,5 m · No apto: viento >65 km/h (≈35 kn) u oleaje >2,5 m'
       },
       buceo: {
         name: '🤿 Buceo',
-        windThreshold: 10,
+        windCaution: 18,        // ≈10 kn (mar en calma para inmersiones)
+        windThreshold: 35,      // ≈19 kn (inmersiones suelen cancelarse con viento fuerte)
         visibilityThreshold: 10,
-        waveMax: 1.5,
-        info: 'Condiciones ideales: Visibilidad >10km, Viento <10 km/h, Oleaje <1.5m'
+        waveMax: 0.8,
+        waveNoGo: 1.5,
+        info: 'Ideal: viento <18 km/h (≈10 kn), oleaje <0,8 m · Precaución: viento 18–35 km/h u oleaje 0,8–1,5 m · No apto: viento >35 km/h u oleaje >1,5 m'
       },
       snorkel: {
         name: '🏊 Snorkel',
-        windThreshold: 10,
+        windCaution: 11,        // ≈6 kn (brisa ligera)
+        windThreshold: 20,      // ≈11 kn
         visibilityThreshold: 8,
-        waveMax: 0.5,
-        info: 'Condiciones ideales: Visibilidad >8km, Viento <10 km/h, Oleaje <0.5m (mar en calma)'
+        waveMax: 0.3,
+        waveNoGo: 0.6,
+        info: 'Ideal: viento <11 km/h (≈6 kn), oleaje <0,3 m · Precaución: viento 11–20 km/h u oleaje 0,3–0,6 m · No apto: viento >20 km/h u oleaje >0,6 m'
       },
       hydrofoil: {
         name: '🪂 Hydrofoil',
-        windThreshold: 40,
+        windMin: 22,            // ≈12 kn (wingfoil: mínimo práctico 12–15 kn)
+        windCaution: 46,        // ≈25 kn
+        windThreshold: 60,      // ≈32 kn
         visibilityThreshold: 8,
-        windMin: 12,
-        waveMin: 1.0,
-        info: 'Condiciones ideales: Viento >12 km/h, Oleaje >1m, Visibilidad >8km'
+        waveMax: 0.5,           // el foil necesita agua plana
+        waveNoGo: 1.0,
+        info: 'Ideal: viento 22–46 km/h (12–25 kn), oleaje <0,5 m (agua plana), visibilidad >8 km · Precaución: viento <22 o >46 km/h u oleaje 0,5–1 m · No apto: viento >60 km/h (≈32 kn) u oleaje >1 m'
       }
     };
 
@@ -700,6 +814,7 @@
     let currentLocation = null;
     let currentProvince = null;
     let currentActivity = 'paddlesurf';
+    let currentRangeDays = 2;
     let activityStart = 10;
     let activityEnd = 14;
     let forecastChart = null;
@@ -731,7 +846,7 @@
         } else {
           document.getElementById('activityInfo').innerHTML = 
             `<strong style="color: var(--color-primary);">${activity.name}</strong><br/>
-             <span style="font-size: 0.75em; color: var(--color-text-faint);">Requisitos: ${activity.info}</span>`;
+             <span style="font-size: 0.9em; color: var(--color-text-faint);">Requisitos: ${activity.info}</span>`;
         }
       });
     }
@@ -751,6 +866,145 @@
         if (currentData) {
           renderHourlyTable(currentData);
           renderCurrent(currentData);
+        }
+      });
+    }
+
+    // === Puntos de salida (calas) ===
+    const LAUNCH_KEY = 'marineMonitor.launchPoints';
+
+    function loadLaunchPoints() {
+      try {
+        const v = JSON.parse(localStorage.getItem(LAUNCH_KEY) || '[]');
+        return Array.isArray(v) ? v : [];
+      } catch (e) { return []; }
+    }
+
+    function saveLaunchPoints(list) {
+      try {
+        localStorage.setItem(LAUNCH_KEY, JSON.stringify(list));
+        return true;
+      } catch (e) { return false; }
+    }
+
+    function isSafeUrl(u) {
+      try {
+        const x = new URL(u);
+        return x.protocol === 'https:' || x.protocol === 'http:';
+      } catch (e) { return false; }
+    }
+
+    function setLaunchMsg(text) {
+      document.getElementById('launchMsg').textContent = text || '';
+    }
+
+    function renderLaunchPoints() {
+      const list = document.getElementById('launchList');
+      const current = currentLocation ? currentLocation.name : null;
+      const points = loadLaunchPoints().slice().sort((a, b) => {
+        const aHere = a.beach === current ? 0 : 1;
+        const bHere = b.beach === current ? 0 : 1;
+        return aHere - bHere;
+      });
+
+      list.textContent = '';
+      if (points.length === 0) {
+        const li = document.createElement('li');
+        li.style.cssText = 'font-size: 0.8rem; color: var(--color-text-muted);';
+        li.textContent = 'Aún no hay puntos de salida guardados.';
+        list.appendChild(li);
+        return;
+      }
+
+      points.forEach((pt) => {
+        const li = document.createElement('li');
+        li.style.cssText = 'padding: 0.6rem 0.75rem; border: 1px solid var(--color-divider); border-radius: var(--radius-md); background: var(--color-surface-2);';
+
+        const head = document.createElement('div');
+        head.style.cssText = 'display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;';
+
+        const title = document.createElement('div');
+        title.style.cssText = 'font-weight: 600; font-size: 0.9rem; color: var(--color-text);';
+        title.textContent = pt.name;
+        head.appendChild(title);
+
+        const del = document.createElement('button');
+        del.type = 'button';
+        del.textContent = 'Eliminar';
+        del.style.cssText = 'padding: 0.2rem 0.5rem; font-size: 0.75rem; border-radius: var(--radius-md); border: 1px solid var(--color-divider); background: transparent; color: var(--color-text-muted); cursor: pointer;';
+        del.addEventListener('click', () => {
+          const rest = loadLaunchPoints().filter((x) => x.id !== pt.id);
+          if (saveLaunchPoints(rest)) renderLaunchPoints();
+          else setLaunchMsg('No se pudo guardar el cambio en este navegador.');
+        });
+        head.appendChild(del);
+        li.appendChild(head);
+
+        const meta = document.createElement('div');
+        meta.style.cssText = 'font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.2rem;';
+        meta.textContent = pt.beach ? `Playa: ${pt.beach}${pt.beach === current ? ' (seleccionada)' : ''}` : 'Sin playa asociada';
+        li.appendChild(meta);
+
+        if (pt.notes) {
+          const notes = document.createElement('div');
+          notes.style.cssText = 'font-size: 0.8rem; color: var(--color-text); margin-top: 0.3rem;';
+          notes.textContent = pt.notes;
+          li.appendChild(notes);
+        }
+
+        if (pt.url && isSafeUrl(pt.url)) {
+          const link = document.createElement('a');
+          link.href = pt.url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.textContent = 'Abrir ubicación ↗';
+          link.style.cssText = 'display: inline-block; margin-top: 0.3rem; font-size: 0.8rem; color: var(--color-primary);';
+          li.appendChild(link);
+        }
+
+        list.appendChild(li);
+      });
+    }
+
+    function initLaunchPoints() {
+      document.getElementById('launchAdd').addEventListener('click', () => {
+        const name = document.getElementById('launchName').value.trim();
+        const url = document.getElementById('launchUrl').value.trim();
+        const notes = document.getElementById('launchNotes').value.trim();
+
+        if (!name) { setLaunchMsg('Pon un nombre para el punto de salida.'); return; }
+        if (url && !isSafeUrl(url)) { setLaunchMsg('El enlace no es válido. Debe empezar por https://'); return; }
+
+        const list = loadLaunchPoints();
+        list.push({
+          id: Date.now(),
+          name,
+          url,
+          notes,
+          beach: currentLocation ? currentLocation.name : '',
+        });
+
+        if (!saveLaunchPoints(list)) {
+          setLaunchMsg('No se pudo guardar en este navegador (¿modo privado?).');
+          return;
+        }
+
+        document.getElementById('launchName').value = '';
+        document.getElementById('launchUrl').value = '';
+        document.getElementById('launchNotes').value = '';
+        setLaunchMsg('Punto guardado.');
+        renderLaunchPoints();
+      });
+      renderLaunchPoints();
+    }
+
+    function initRangeSelect() {
+      const rangeSelect = document.getElementById('rangeSelect');
+      rangeSelect.addEventListener('change', (e) => {
+        currentRangeDays = parseInt(e.target.value);
+        if (currentData) {
+          renderChart(currentData);
+          renderHourlyTable(currentData);
         }
       });
     }
@@ -794,6 +1048,7 @@
       // Actualizar Windy link
       document.getElementById('windyLink').href = `https://windy.com/?${loc.lat},${loc.lon},11`;
       
+      renderLaunchPoints();
       loadData();
     }
 
@@ -817,10 +1072,11 @@
       
       const wind = f.current?.wind_speed_10m ?? 0;
       const visibility = (f.current?.visibility ?? 10000) / 1000;
-      const waveHeight = m.current?.wave_height ?? 0;
+      const waveHeight = m?.current?.wave_height ?? null;
       const rainProb = f.current?.precipitation_probability ?? 0;
       
-      const status = getStatus(wind, visibility, waveHeight, rainProb);
+      const windDirNow = f.current?.wind_direction_10m;
+      const status = getStatus(wind, visibility, waveHeight, rainProb, windDirNow);
       
       let conditionText = '';
       if (status.level === 'go') {
@@ -833,56 +1089,85 @@
       
       document.getElementById('activityInfo').innerHTML =
         `<strong style="color: var(--color-primary);">${activity.name}</strong><br/>
-         <span style="font-size: 0.85em;">${conditionText}</span><br/>
-         <span style="font-size: 0.75em; color: var(--color-text-faint);">Requisitos: ${activity.info}</span>`;
+         <span style="font-size: 0.9em;">${conditionText}</span><br/>
+         <span style="font-size: 0.9em; color: var(--color-text-faint);">Requisitos: ${activity.info}</span>`;
     }
 
-    function getStatus(wind, visibility, waveHeight, rainProb) {
+    // Viento respecto a la costa: 'onshore' (de mar a tierra), 'offshore' (de tierra a mar) o 'lateral'
+    function windRelativeToCoast(windFromDeg, seaFacingDeg) {
+      const diff = Math.abs(((windFromDeg - seaFacingDeg + 540) % 360) - 180);
+      if (diff <= 45) return 'onshore';
+      if (diff >= 135) return 'offshore';
+      return 'lateral';
+    }
+
+    function getStatus(wind, visibility, waveHeight, rainProb, windDir) {
       const activity = ACTIVITIES[currentActivity];
       const reasons = [];
       let level = 'go';
+      let incomplete = false;
+      const worsen = (lvl) => {
+        if (lvl === 'no-go' || (lvl === 'caution' && level === 'go')) level = lvl;
+      };
 
-      // Validar viento máximo
+      // Viento
       if (wind > activity.windThreshold) {
-        level = 'no-go';
-        reasons.push(`Viento ${wind.toFixed(1)} km/h supera ${activity.windThreshold} km/h`);
+        worsen('no-go');
+        reasons.push(`Viento ${wind.toFixed(1)} km/h supera el máximo de ${activity.windThreshold} km/h`);
+      } else if (wind > activity.windCaution) {
+        worsen('caution');
+        reasons.push(`Viento ${wind.toFixed(1)} km/h por encima del ideal (${activity.windCaution} km/h)`);
+      } else if (activity.windMin && wind < activity.windMin) {
+        worsen('caution');
+        reasons.push(`Viento ${wind.toFixed(1)} km/h por debajo del mínimo (${activity.windMin} km/h)`);
       }
 
-      // Validar visibilidad mínima
+      // Viento offshore (de tierra a mar): solo si la actividad lo define y la playa tiene orientación
+      const facing = currentLocation?.seaFacing;
+      if (activity.offshoreNoGo !== undefined && facing !== undefined && windDir !== undefined) {
+        if (windRelativeToCoast(windDir, facing) === 'offshore') {
+          if (wind > activity.offshoreNoGo) {
+            worsen('no-go');
+            reasons.push(`Viento offshore ${wind.toFixed(1)} km/h (de tierra a mar): no apto por encima de ${activity.offshoreNoGo} km/h`);
+          } else if (wind > activity.offshoreCaution) {
+            worsen('caution');
+            reasons.push(`Viento offshore ${wind.toFixed(1)} km/h (de tierra a mar): precaución por encima de ${activity.offshoreCaution} km/h`);
+          }
+        }
+      }
+
+      // Visibilidad
       if (visibility < activity.visibilityThreshold) {
-        level = 'no-go';
+        worsen('no-go');
         reasons.push(`Visibilidad ${visibility.toFixed(1)} km por debajo de ${activity.visibilityThreshold} km`);
       }
 
-      // Validar oleaje específico por actividad
-      if (level === 'go') {
-        if (activity.waveMax && waveHeight > activity.waveMax) {
-          level = 'caution';
-          reasons.push(`Oleaje ${waveHeight.toFixed(1)} m supera máximo ${activity.waveMax} m`);
-        } else if (activity.waveMin && waveHeight < activity.waveMin) {
-          level = 'caution';
-          reasons.push(`Oleaje ${waveHeight.toFixed(1)} m por debajo de mínimo ${activity.waveMin} m`);
-        }
-
-        // Validar viento mínimo (para actividades que lo necesitan)
-        if (activity.windMin && wind < activity.windMin && level === 'go') {
-          level = 'caution';
-          reasons.push(`Viento ${wind.toFixed(1)} km/h por debajo de ${activity.windMin} km/h requerido`);
-        }
-
-        // Lluvia
-        if (rainProb > 60 && level === 'go') { 
-          level = 'caution'; 
-          reasons.push(`Alta probabilidad de lluvia (${rainProb}%)`); 
-        }
+      // Oleaje (si falta el dato, la evaluación queda incompleta; no se supone oleaje cero)
+      if (waveHeight === null || waveHeight === undefined || Number.isNaN(waveHeight)) {
+        incomplete = true;
+        reasons.push('Falta el dato de oleaje (API marina no disponible)');
+      } else if (waveHeight > activity.waveNoGo) {
+        worsen('no-go');
+        reasons.push(`Oleaje ${waveHeight.toFixed(1)} m supera el máximo de ${activity.waveNoGo} m`);
+      } else if (waveHeight > activity.waveMax) {
+        worsen('caution');
+        reasons.push(`Oleaje ${waveHeight.toFixed(1)} m por encima del ideal (${activity.waveMax} m)`);
       }
-      return { level, reasons };
+
+      // Lluvia
+      if (rainProb > 60) {
+        worsen('caution');
+        reasons.push(`Alta probabilidad de lluvia (${rainProb}%)`);
+      }
+
+      return { level, reasons, incomplete };
     }
 
     function getStatusInfo(level) {
-      if (level === 'go') return { title: 'Condiciones Aptas', detail: 'Buenas condiciones para paddle surf' };
+      const name = ACTIVITIES[currentActivity].name.split(' ').slice(1).join(' ');
+      if (level === 'go') return { title: 'Condiciones Aptas', detail: `Buenas condiciones para ${name.toLowerCase()}` };
       if (level === 'caution') return { title: 'Precaución', detail: 'Condiciones marginales, evalúa antes de salir' };
-      return { title: 'No Recomendable', detail: 'Condiciones adversas para navegar' };
+      return { title: 'No Recomendable', detail: `Condiciones adversas para ${name.toLowerCase()}` };
     }
 
     function getStatusIcon(level) {
@@ -918,22 +1203,29 @@
     // === Data Fetching ===
     async function fetchAllData() {
       if (!currentLocation) return null;
-      try {
-        const [forecastRes, marineRes] = await Promise.all([
-          fetch(buildForecastUrl(currentLocation)).then(r => {
-            if (!r.ok) throw new Error(`HTTP ${r.status}`);
-            return r.json();
-          }),
-          fetch(buildMarineUrl(currentLocation)).then(r => {
-            if (!r.ok) throw new Error(`HTTP ${r.status}`);
-            return r.json();
-          }),
-        ]);
-        return { forecast: forecastRes, marine: marineRes };
-      } catch (err) {
-        console.error('Error fetching data:', err);
-        throw err;
+      const getJson = (url) => fetch(url).then(r => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      });
+      const [fRes, mRes] = await Promise.allSettled([
+        getJson(buildForecastUrl(currentLocation)),
+        getJson(buildMarineUrl(currentLocation)),
+      ]);
+      // La previsión de viento es imprescindible; si falla, no hay evaluación
+      if (fRes.status !== 'fulfilled') {
+        console.error('Previsión meteorológica no disponible:', fRes.reason);
+        throw fRes.reason;
       }
+      // El oleaje es opcional: si falla, se conservan el resto de datos
+      let marine = null;
+      let marineError = null;
+      if (mRes.status === 'fulfilled') {
+        marine = mRes.value;
+      } else {
+        marineError = (mRes.reason && mRes.reason.message) || 'error';
+        console.warn('Oleaje no disponible:', mRes.reason);
+      }
+      return { forecast: fRes.value, marine, marineError, fetchedAt: new Date() };
     }
 
     // === Rendering ===
@@ -945,27 +1237,49 @@
       const windDir = f.current?.wind_direction_10m ?? 0;
       const rainProb = f.current?.precipitation_probability ?? 0;
       const visibility = (f.current?.visibility ?? 10000) / 1000;
-      const waveHeight = m.current?.wave_height ?? 0;
-      const wavePeriod = m.current?.wave_period ?? 0;
+      const waveHeight = m?.current?.wave_height ?? null;
+      const wavePeriod = m?.current?.wave_period ?? null;
 
-      const status = getStatus(wind, visibility, waveHeight, rainProb);
+      const status = getStatus(wind, visibility, waveHeight, rainProb, windDir);
       const statusInfo = getStatusInfo(status.level);
 
       const banner = document.getElementById('statusBanner');
-      banner.className = `status-banner status-${status.level}`;
-      document.getElementById('statusTitle').textContent = statusInfo.title;
-      document.getElementById('statusDetail').textContent =
-        status.reasons.length > 0 ? status.reasons.join(' · ') : statusInfo.detail;
-      document.getElementById('statusIcon').textContent = getStatusIcon(status.level);
+      banner.className = `status-banner status-${status.incomplete ? 'caution' : status.level}`;
+      
+      // Título
+      document.getElementById('statusTitle').textContent = status.incomplete ? 'Evaluación incompleta' : statusInfo.title;
+      
+      // Timestamp y rango de validez
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      const diasText = currentRangeDays === 1 ? '24h' : `${currentRangeDays} días`;
+      document.getElementById('statusTimestamp').textContent = 
+        `✓ CONDICIONES ACTUALES | Válido AHORA (${timeStr}) | Pronóstico próximos ${diasText}`;
+      
+      // Detalle con razones específicas
+      const reasonsText = status.reasons.length > 0 ? status.reasons.join(' • ') : statusInfo.detail;
+      document.getElementById('statusDetail').textContent = reasonsText;
+      
+      // Razones técnicas detalladas
+      const technicalReasons = [];
+      const activity = ACTIVITIES[currentActivity];
+      technicalReasons.push(`Viento ${wind.toFixed(1)} km/h (ideal ≤${activity.windCaution}, máx ${activity.windThreshold})`);
+      technicalReasons.push(`Visibilidad ${visibility.toFixed(1)} km (mín ${activity.visibilityThreshold})`);
+      technicalReasons.push(waveHeight === null ? 'Oleaje: sin datos' : `Oleaje ${waveHeight.toFixed(1)} m (ideal ≤${activity.waveMax}, máx ${activity.waveNoGo})`);
+      
+      document.getElementById('statusReasons').textContent = 
+        technicalReasons.length > 0 ? `Detalles: ${technicalReasons.join(' | ')}` : '';
+      
+      document.getElementById('statusIcon').textContent = status.incomplete ? '!' : getStatusIcon(status.level);
 
       document.getElementById('windSpeed').textContent = wind.toFixed(1);
       document.getElementById('windDir').textContent = `Dir: ${degToCompass(windDir)}`;
       document.getElementById('windDirArrow').textContent = getArrowForDirection(windDir);
-      document.getElementById('cardWind').classList.toggle('alert', wind > CONFIG.windThreshold);
+      document.getElementById('cardWind').classList.toggle('alert', wind > ACTIVITIES[currentActivity].windCaution);
 
-      document.getElementById('waveHeight').textContent = waveHeight.toFixed(1);
-      document.getElementById('wavePeriod').textContent = `Periodo: ${wavePeriod.toFixed(1)} s`;
-      document.getElementById('cardWave').classList.toggle('alert', waveHeight > 1.0);
+      document.getElementById('waveHeight').textContent = waveHeight === null ? '—' : waveHeight.toFixed(1);
+      document.getElementById('wavePeriod').textContent = wavePeriod === null ? 'Periodo: —' : `Periodo: ${wavePeriod.toFixed(1)} s`;
+      document.getElementById('cardWave').classList.toggle('alert', waveHeight !== null && waveHeight > ACTIVITIES[currentActivity].waveMax);
 
       document.getElementById('rainProb').textContent = rainProb;
       document.getElementById('rainBarFill').style.width = `${rainProb}%`;
@@ -974,8 +1288,8 @@
       const visDisplay = visibility >= 10 ? visibility.toFixed(0) : visibility.toFixed(1);
       document.getElementById('visibility').textContent = visDisplay;
       document.getElementById('visStatus').textContent =
-        visibility >= CONFIG.visibilityThreshold ? 'Adecuada' : 'Baja';
-      document.getElementById('cardVis').classList.toggle('alert', visibility < CONFIG.visibilityThreshold);
+        visibility >= ACTIVITIES[currentActivity].visibilityThreshold ? 'Adecuada' : 'Baja';
+      document.getElementById('cardVis').classList.toggle('alert', visibility < ACTIVITIES[currentActivity].visibilityThreshold);
 
       const inWindow = isNowInActivityWindow();
       const ws = document.getElementById('windowStatus');
@@ -994,16 +1308,17 @@
       const textColor = isDark ? '#7a92a0' : '#5a7180';
       const gridColor = isDark ? '#1f3040' : '#eef2f5';
 
-      const hours = f.hourly.time.slice(0, 48);
+      const hoursToShow = currentRangeDays * 24;
+      const hours = f.hourly.time.slice(0, hoursToShow);
       const labels = hours.map(t => {
         const d = new Date(t);
         return d.toLocaleString('es-ES', { hour: '2-digit', day: '2-digit', month: '2-digit' });
       });
 
-      const windData = f.hourly.wind_speed_10m.slice(0, 48);
-      const visData = f.hourly.visibility.slice(0, 48).map(v => v / 1000);
-      const rainData = f.hourly.precipitation_probability.slice(0, 48);
-      const waveData = m.hourly.wave_height.slice(0, 48);
+      const windData = f.hourly.wind_speed_10m.slice(0, hoursToShow);
+      const visData = f.hourly.visibility.slice(0, hoursToShow).map(v => v / 1000);
+      const rainData = f.hourly.precipitation_probability.slice(0, hoursToShow);
+      const waveData = m ? m.hourly.wave_height.slice(0, hoursToShow) : hours.map(() => null);
 
       if (forecastChart) forecastChart.destroy();
 
@@ -1042,7 +1357,78 @@
       });
     }
 
+    // === Mejores franjas del rango elegido ===
+    function renderBestWindows(data) {
+      const box = document.getElementById('bestWindowsList');
+      if (!box) return;
+      box.textContent = '';
+      if (!data || !data.forecast) return;
+
+      const f = data.forecast;
+      const m = data.marine;
+      const now = new Date();
+      const limit = new Date(now.getTime() + currentRangeDays * 24 * 3600 * 1000);
+      const activity = ACTIVITIES[currentActivity];
+      // Centro del rango ideal de viento (criterio de desempate)
+      const mid = activity.windMin ? (activity.windMin + activity.windCaution) / 2 : activity.windCaution / 2;
+      const rankOf = { go: 0, caution: 1, 'no-go': 2 };
+
+      const candidates = [];
+      for (let i = 0; i < f.hourly.time.length; i++) {
+        const d = new Date(f.hourly.time[i]);
+        if (d < now || d > limit) continue;
+        const h = d.getHours();
+        if (h < activityStart || h > activityEnd) continue;
+        const wind = f.hourly.wind_speed_10m[i];
+        const vis = f.hourly.visibility[i] / 1000;
+        const rain = f.hourly.precipitation_probability[i];
+        const wave = m ? m.hourly.wave_height[i] : null;
+        const status = getStatus(wind, vis, wave, rain, f.hourly.wind_direction_10m[i]);
+        candidates.push({
+          d, wind, status,
+          rank: status.incomplete ? 3 : rankOf[status.level],
+          dist: Math.abs(wind - mid),
+        });
+      }
+
+      candidates.sort((a, b) => a.rank - b.rank || a.dist - b.dist);
+      const top = candidates.filter(c => c.rank < 3).slice(0, 3);
+
+      if (!m) {
+        appendNote(box, 'Sin datos de oleaje: no se pueden ordenar las franjas.');
+        return;
+      }
+      if (top.length === 0) {
+        appendNote(box, 'Ninguna hora del rango cumple los criterios de esta actividad.');
+        return;
+      }
+
+      top.forEach((c) => {
+        const li = document.createElement('li');
+        li.style.cssText = 'padding: 0.5rem 0.75rem; border: 1px solid var(--color-divider); border-radius: var(--radius-md); font-size: 0.85rem;';
+        const when = c.d.toLocaleString('es-ES', { weekday: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+        const label = c.status.level === 'go' ? 'Apto' : c.status.level === 'caution' ? 'Precaución' : 'No apto';
+        const head = document.createElement('div');
+        head.style.fontWeight = '600';
+        head.textContent = `${when} · ${label}`;
+        li.appendChild(head);
+        const why = document.createElement('div');
+        why.style.cssText = 'font-size: 0.78rem; color: var(--color-text-muted); margin-top: 0.2rem;';
+        why.textContent = c.status.reasons.length ? c.status.reasons[0] : 'Sin factores de penalización en esta hora';
+        li.appendChild(why);
+        box.appendChild(li);
+      });
+    }
+
+    function appendNote(box, text) {
+      const li = document.createElement('li');
+      li.style.cssText = 'font-size: 0.8rem; color: var(--color-text-muted);';
+      li.textContent = text;
+      box.appendChild(li);
+    }
+
     function renderHourlyTable(data) {
+      renderBestWindows(data);
       const f = data.forecast;
       const m = data.marine;
       const tbody = document.getElementById('hourlyTableBody');
@@ -1050,44 +1436,50 @@
 
       const now = new Date();
       let count = 0;
+      const hoursToShow = currentRangeDays * 24;
+      const limitTime = new Date(now.getTime() + hoursToShow * 60 * 60 * 1000);
+      
       for (let i = 0; i < f.hourly.time.length; i++) {
         const d = new Date(f.hourly.time[i]);
         const h = d.getHours();
         if (h >= activityStart && h <= activityEnd) {
           if (d >= now || (d.getDate() === now.getDate() && d.getHours() === now.getHours())) {
-            const wind = f.hourly.wind_speed_10m[i];
-            const windDir = f.hourly.wind_direction_10m[i];
-            const vis = f.hourly.visibility[i] / 1000;
-            const rain = f.hourly.precipitation_probability[i];
-            const wave = m.hourly.wave_height[i];
-            const period = m.hourly.wave_period[i];
+            if (d <= limitTime) {
+              const wind = f.hourly.wind_speed_10m[i];
+              const windDir = f.hourly.wind_direction_10m[i];
+              const vis = f.hourly.visibility[i] / 1000;
+              const rain = f.hourly.precipitation_probability[i];
+              const wave = m ? m.hourly.wave_height[i] : null;
+              const period = m ? m.hourly.wave_period[i] : null;
 
-            const status = getStatus(wind, vis, wave, rain);
-            const badgeClass = status.level === 'go' ? 'badge-go' : status.level === 'caution' ? 'badge-caution' : 'badge-no-go';
-            const badgeText = status.level === 'go' ? 'Apto' : status.level === 'caution' ? 'Precaución' : 'No apto';
+              const status = getStatus(wind, vis, wave, rain, windDir);
+              const badgeClass = status.incomplete ? 'badge-caution' : (status.level === 'go' ? 'badge-go' : status.level === 'caution' ? 'badge-caution' : 'badge-no-go');
+              const badgeText = status.incomplete ? 'Incompleta' : (status.level === 'go' ? 'Apto' : status.level === 'caution' ? 'Precaución' : 'No apto');
 
-            const timeLabel = d.toLocaleString('es-ES', { weekday: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+              const timeLabel = d.toLocaleString('es-ES', { weekday: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' });
 
-            const row = document.createElement('tr');
-            if (d.getDate() === now.getDate() && h === now.getHours()) row.className = 'row-highlight';
-            row.innerHTML = `
-              <td>${timeLabel}</td>
-              <td>${wind.toFixed(1)}</td>
-              <td>${getArrowForDirection(windDir)} ${degToCompass(windDir)}</td>
-              <td>${wave.toFixed(1)} m</td>
-              <td>${period.toFixed(1)} s</td>
-              <td>${rain}%</td>
-              <td>${vis >= 10 ? vis.toFixed(0) : vis.toFixed(1)}</td>
-              <td><span class="badge ${badgeClass}">${badgeText}</span></td>
-            `;
-            tbody.appendChild(row);
-            count++;
+              const row = document.createElement('tr');
+              if (d.getDate() === now.getDate() && h === now.getHours()) row.className = 'row-highlight';
+              row.innerHTML = `
+                <td>${timeLabel}</td>
+                <td>${wind.toFixed(1)}</td>
+                <td>${getArrowForDirection(windDir)} ${degToCompass(windDir)}</td>
+                <td>${wave === null ? '—' : wave.toFixed(1) + ' m'}</td>
+                <td>${period === null ? '—' : period.toFixed(1) + ' s'}</td>
+                <td>${rain}%</td>
+                <td>${vis >= 10 ? vis.toFixed(0) : vis.toFixed(1)}</td>
+                <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+              `;
+              tbody.appendChild(row);
+              count++;
+            }
           }
         }
       }
 
       if (count === 0) {
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No hay horas de actividad en las próximas 48h</td></tr>';
+        const diasText = currentRangeDays === 1 ? '24h' : `${currentRangeDays} días`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--color-text-muted)">No hay horas de actividad en los próximos ${diasText}</td></tr>`;
       }
     }
 
@@ -1098,21 +1490,29 @@
 
     // === Main ===
     async function loadData() {
+      const app = document.querySelector('.app');
+      app.classList.add('loading');
       try {
-        document.querySelector('.app').classList.add('loading');
-        currentData = await fetchAllData();
-        if (currentData) {
+        const fresh = await fetchAllData();
+        if (fresh) {
+          currentData = fresh;
           renderCurrent(currentData);
           renderChart(currentData);
           renderHourlyTable(currentData);
           updateLastUpdate();
         }
-        document.querySelector('.app').classList.remove('loading');
       } catch (err) {
         console.error('Error fetching data:', err);
-        document.getElementById('statusTitle').textContent = 'Error de conexión';
-        document.getElementById('statusDetail').textContent = 'No se pudieron obtener los datos meteorológicos. Reintentando…';
-        document.querySelector('.app').classList.remove('loading');
+        if (currentData) {
+          const hora = currentData.fetchedAt.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+          document.getElementById('statusDetail').textContent =
+            `No se pudo actualizar. Mostrando datos de las ${hora} (desactualizados).`;
+        } else {
+          document.getElementById('statusTitle').textContent = 'Error de conexión';
+          document.getElementById('statusDetail').textContent = 'No se pudo obtener la previsión meteorológica. Reintentando…';
+        }
+      } finally {
+        app.classList.remove('loading');
       }
     }
 
@@ -1121,7 +1521,15 @@
       initActivitySelect();
       initProvinceSelect();
       initTimeWindowSelect();
+      initRangeSelect();
+      initLaunchPoints();
     });
+  </script>
+  <script>
+    // Registro del service worker (solo cuando la página se sirve por http/https)
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('sw.js').catch(err => console.warn('SW no registrado:', err));
+    }
   </script>
 </body>
 </html>
