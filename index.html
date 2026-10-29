@@ -413,12 +413,263 @@
       .status-content { width: 100%; }
       .province-selector { flex-direction: column; align-items: flex-start; }
     }
+
+    /* ===== LANDING ===== */
+    .app { display: none; }
+    body.view-app .app { display: block; }
+    body.view-app .landing { display: none; }
+    .lp-back { display: inline-block; margin-bottom: 1rem; font-size: 0.85rem; color: var(--color-primary); text-decoration: none; font-weight: 600; }
+    .landing { color: #0b1f3a; background: #f4f6f8; min-height: 100vh; font-family: 'Manrope', system-ui, sans-serif; }
+    .lp-nav { position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1rem; padding: 0.75rem 1.25rem; background: rgba(0,47,116,0.94); color: #fff; backdrop-filter: blur(6px); }
+    .lp-brand { display: flex; align-items: center; gap: 0.5rem; color: #fff; text-decoration: none; font-weight: 800; }
+    .lp-brand img { width: 36px; height: 36px; border-radius: 8px; }
+    .lp-links { display: flex; gap: 1rem; }
+    .lp-links a { color: #dbe6f5; text-decoration: none; font-size: 0.9rem; }
+    .lp-links a:hover { color: #fff; }
+    .lp-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+    .lp-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.6rem 1.1rem; border-radius: 999px; font-weight: 700; font-size: 0.9rem; text-decoration: none; border: 1px solid transparent; cursor: pointer; font-family: inherit; transition: transform 0.15s ease, opacity 0.15s ease; }
+    .lp-btn:hover { transform: translateY(-1px); }
+    .lp-btn:focus-visible, .lp-links a:focus-visible, .lp-lang button:focus-visible, .lp-footer a:focus-visible { outline: 3px solid #f3731c; outline-offset: 2px; }
+    .lp-btn.accent { background: #f3731c; color: #fff; }
+    .lp-btn.ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,0.45); }
+    .lp-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .lp-lang { display: flex; gap: 0.1rem; }
+    .lp-lang button { background: transparent; border: 0; color: #dbe6f5; font-weight: 700; padding: 0.3rem 0.4rem; cursor: pointer; font-family: inherit; }
+    .lp-lang button[aria-pressed="true"] { color: #fff; text-decoration: underline; }
+    .lp-hero { position: relative; min-height: 88vh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; color: #fff; padding: 4rem 1.25rem; }
+    .lp-hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 72% 8%, rgba(150,230,235,0.35), transparent 55%), radial-gradient(ellipse at 15% 85%, rgba(0,170,180,0.35), transparent 60%), linear-gradient(180deg, #0a4f9c 0%, #00356e 45%, #001f47 100%); }
+    .lp-hero-bg::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(105deg, rgba(255,255,255,0.05) 0 14px, transparent 14px 46px); }
+    .lp-hero-bg::after { content: ""; position: absolute; inset: auto 0 0 0; height: 35%; background: linear-gradient(transparent, #001f47); }
+    .lp-hero-content { position: relative; z-index: 1; max-width: 680px; animation: lpFade 0.9s ease both; }
+    .lp-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; font-weight: 800; margin: 0.4rem 0 0; }
+    .lp-eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.75rem; color: #9fe3ea; font-weight: 700; }
+    .lp-lead { font-size: 1.1rem; color: #e3edf9; margin: 1rem 0 1.5rem; }
+    .lp-cta-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .lp-note { font-size: 0.85rem; color: #b9cde6; margin-top: 1.25rem; }
+    .lp-floats { position: relative; z-index: 1; display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 2.25rem; }
+    .lp-float { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.22); border-radius: 14px; padding: 0.6rem 0.85rem; backdrop-filter: blur(8px); font-size: 0.8rem; min-width: 140px; animation: lpFloat 6s ease-in-out infinite; }
+    .lp-float:nth-child(2) { animation-delay: -2s; }
+    .lp-float:nth-child(3) { animation-delay: -4s; }
+    .lp-float b { display: block; font-size: 1.05rem; color: #fff; }
+    .lp-tag { display: inline-block; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; background: #f3731c; color: #fff; border-radius: 999px; padding: 0.1rem 0.45rem; margin-bottom: 0.3rem; font-weight: 700; }
+    .lp-section { padding: 4rem 1.25rem; max-width: 1100px; margin: 0 auto; }
+    .lp-section h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); color: #002f74; margin: 0 0 0.5rem; line-height: 1.2; }
+    .lp-sub { color: #4a5a70; margin-bottom: 2rem; }
+    .lp-band { background: linear-gradient(135deg, #e6f2fa, #d4e9f4); }
+    .lp-band .lp-section { padding-top: 4rem; }
+    .lp-grid2 { display: grid; gap: 2rem; grid-template-columns: 1fr; align-items: center; }
+    @media (min-width: 800px) { .lp-grid2 { grid-template-columns: 1fr 1fr; } }
+    .lp-visual { height: 260px; border-radius: 20px; background: radial-gradient(circle at 30% 30%, rgba(150,230,235,0.5), transparent 50%), linear-gradient(160deg, #0a4f9c, #001f47); position: relative; overflow: hidden; }
+    /* Sustituir por fotografía con licencia comercial (ver README de configuración) */
+    .lp-cards { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .lp-card { background: #fff; border: 1px solid #dfe7f0; border-radius: 16px; padding: 1.25rem; box-shadow: 0 6px 20px rgba(0,47,116,0.06); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .lp-card:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(0,47,116,0.12); }
+    .lp-card .ic { font-size: 1.8rem; }
+    .lp-card h3 { margin: 0.5rem 0 0.3rem; color: #002f74; font-size: 1.1rem; }
+    .lp-card p { font-size: 0.9rem; color: #4a5a70; margin: 0 0 0.5rem; }
+    .lp-card small { color: #6b7c93; font-size: 0.78rem; }
+    .lp-steps { counter-reset: s; display: grid; gap: 0.75rem; list-style: none; padding: 0; margin: 0; }
+    .lp-steps li { counter-increment: s; background: #fff; border-radius: 12px; padding: 0.8rem 1rem 0.8rem 3rem; position: relative; border: 1px solid #dfe7f0; font-size: 0.95rem; }
+    .lp-steps li::before { content: counter(s); position: absolute; left: 0.8rem; top: 0.75rem; width: 1.6rem; height: 1.6rem; border-radius: 50%; background: #002f74; color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 0.8rem; }
+    .lp-demo { background: #fff; border: 1px solid #dfe7f0; border-radius: 18px; padding: 1rem; }
+    .lp-demo-cap { font-size: 0.75rem; color: #6b7c93; margin-top: 0.5rem; }
+    .lp-bars { display: flex; align-items: flex-end; gap: 6px; height: 130px; }
+    .lp-bars span { flex: 1; background: linear-gradient(#0a7bb5, #002f74); border-radius: 6px 6px 0 0; }
+    .lp-bars span.warn { background: linear-gradient(#f3a31c, #f3731c); }
+    .lp-beta { background: linear-gradient(135deg, #002f74, #001f47); color: #fff; border-radius: 24px; padding: 2.5rem 1.5rem; }
+    .lp-beta h2 { color: #fff; }
+    .lp-beta .lp-main { font-size: 1.2rem; font-weight: 700; color: #ffb27a; }
+    .lp-form { display: grid; gap: 0.75rem; grid-template-columns: 1fr; margin-top: 1.5rem; }
+    @media (min-width: 700px) { .lp-form { grid-template-columns: 1fr 1fr; } }
+    .lp-form .full { grid-column: 1 / -1; }
+    .lp-form label { font-size: 0.85rem; display: grid; gap: 0.3rem; color: #e3edf9; }
+    .lp-form input { padding: 0.7rem 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.08); color: #fff; font: inherit; }
+    .lp-form input:focus { outline: 3px solid #f3731c; outline-offset: 2px; }
+    .lp-form .check { display: flex; gap: 0.5rem; align-items: flex-start; font-size: 0.85rem; color: #e3edf9; }
+    .lp-msg { font-size: 0.85rem; color: #ffd7b8; min-height: 1.2rem; margin-top: 0.5rem; }
+    .lp-footer { background: #001a3d; color: #c8d6ea; padding: 3rem 1.25rem 2rem; }
+    .lp-footer a { color: #c8d6ea; }
+    .lp-footer-grid { max-width: 1100px; margin: 0 auto; display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+    @media (min-width: 800px) { .lp-footer-grid { grid-template-columns: 2fr 1fr 1fr; } }
+    .lp-footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.4rem; font-size: 0.9rem; }
+    .lp-footer .warn { font-size: 0.8rem; color: #9db3d1; max-width: 1100px; margin: 2rem auto 0; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 1rem; }
+    .lp-pending { font-size: 0.75rem; color: #9db3d1; }
+    @keyframes lpFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    @keyframes lpFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @media (max-width: 720px) { .lp-links { order: 3; width: 100%; justify-content: center; } }
+    @media (prefers-reduced-motion: reduce) {
+      .lp-hero-content, .lp-float, .lp-card { animation: none !important; transition: none !important; }
+      html { scroll-behavior: auto; }
+    }
+    html { scroll-behavior: smooth; }
   </style>
 </head>
 <body>
+<div class="landing" id="landing">
+  <header class="lp-nav">
+    <a class="lp-brand" href="#" aria-label="Marine Monitor">
+      <img src="mmclub-logo.png" alt="" width="36" height="36" />
+      <span>Marine Monitor</span>
+    </a>
+    <nav class="lp-links" aria-label="Principal">
+      <a href="#funciones" data-i18n="nav_features">Funcionalidades</a>
+      <a href="#actividades" data-i18n="nav_activities">Actividades</a>
+      <a href="#rutas" data-i18n="nav_routes">Rutas</a>
+    </nav>
+    <div class="lp-actions">
+      <div class="lp-lang" role="group" aria-label="Idioma">
+        <button type="button" data-lang="es" aria-pressed="true">ES</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button class="lp-btn ghost" id="lpLoginBtn" type="button" data-i18n="login">Iniciar sesión</button>
+      <a class="lp-btn accent" href="#beta" data-i18n="cta_beta">Solicitar acceso beta</a>
+    </div>
+  </header>
+
+  <section class="lp-hero" aria-labelledby="heroTitle">
+    <div class="lp-hero-bg" aria-hidden="true"></div>
+    <div class="lp-hero-content">
+      <p class="lp-eyebrow" data-i18n="hero_eyebrow">Costa mediterránea · Previsión marina</p>
+      <h1 id="heroTitle" data-i18n="hero_title">El mar, en el momento adecuado</h1>
+      <p class="lp-lead" data-i18n="hero_sub">Descubre las mejores ventanas meteorológicas para tus actividades acuáticas.</p>
+      <div class="lp-cta-row">
+        <a class="lp-btn accent" href="#app" data-i18n="cta_explore">Explorar Marine Monitor</a>
+        <a class="lp-btn ghost" href="#beta" data-i18n="cta_beta">Solicitar acceso beta</a>
+      </div>
+      <p class="lp-note" data-i18n="hero_note">Diseñado para explorar y disfrutar del Mediterráneo con más información.</p>
+    </div>
+    <div class="lp-floats" aria-label="Ilustración">
+      <div class="lp-float"><span class="lp-tag" data-i18n="demo_tag">Demostración</span><span data-i18n="demo_wind">Viento</span><b>14 km/h</b></div>
+      <div class="lp-float"><span class="lp-tag" data-i18n="demo_tag">Demostración</span><span data-i18n="demo_wave">Altura de ola</span><b>0,6 m</b></div>
+      <div class="lp-float"><span class="lp-tag" data-i18n="demo_tag">Demostración</span><span data-i18n="demo_period">Periodo</span><b>5 s</b></div>
+      <div class="lp-float"><span class="lp-tag" data-i18n="demo_tag">Demostración</span><span data-i18n="demo_activity">Actividad</span><b>Paddle Surf</b></div>
+    </div>
+  </section>
+
+  <section class="lp-band" aria-labelledby="medTitle">
+    <div class="lp-section lp-grid2">
+      <div class="lp-visual" aria-hidden="true"></div>
+      <div>
+        <h2 id="medTitle" data-i18n="med_title">Cada salida empieza mucho antes de entrar al agua</h2>
+        <p class="lp-sub" data-i18n="med_text">El viento, el oleaje y la orientación de la costa pueden transformar una jornada.</p>
+        <a class="lp-btn accent" href="#funciones" data-i18n="med_link">Ver las funcionalidades del dashboard</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section" id="funciones" aria-labelledby="winTitle">
+    <h2 id="winTitle" data-i18n="window_title">Encuentra tu ventana</h2>
+    <p class="lp-sub" data-i18n="window_sub">Cómo funciona el motor de evaluación.</p>
+    <div class="lp-grid2">
+      <ol class="lp-steps">
+        <li data-i18n="step1">Selecciona una actividad.</li>
+        <li data-i18n="step2">Elige una playa o punto de salida.</li>
+        <li data-i18n="step3">Consulta el viento y el oleaje.</li>
+        <li data-i18n="step4">Compara las franjas horarias.</li>
+        <li data-i18n="step5">Revisa las condiciones y sus limitaciones.</li>
+      </ol>
+      <div>
+        <div class="lp-demo" aria-hidden="true">
+          <div class="lp-bars">
+            <span style="height:40%"></span><span style="height:55%"></span><span class="warn" style="height:80%"></span>
+            <span style="height:60%"></span><span style="height:35%"></span><span class="warn" style="height:70%"></span>
+            <span style="height:45%"></span>
+          </div>
+        </div>
+        <p class="lp-demo-cap" data-i18n="demo_caption">Ilustración sin datos reales.</p>
+        <p class="lp-sub" style="margin-top:1rem" data-i18n="window_disclaimer">Las recomendaciones son orientativas y dependen de la disponibilidad y calidad de los datos.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-band" id="actividades" aria-labelledby="actTitle">
+    <div class="lp-section">
+      <h2 id="actTitle" data-i18n="act_title">Actividades</h2>
+      <p class="lp-sub" data-i18n="act_sub">Cada deporte tiene sus propios factores. Los criterios son orientativos.</p>
+      <div class="lp-cards">
+        <article class="lp-card"><div class="ic" aria-hidden="true">🏄</div><h3 data-i18n="act_paddle_name">Paddle Surf</h3><p data-i18n="act_paddle_desc">Viento suave, oleaje corto y buena visibilidad.</p><small data-i18n="act_paddle_factors">Viento, oleaje, visibilidad y viento offshore.</small></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">🪁</div><h3 data-i18n="act_windsurf_name">Windsurf</h3><p data-i18n="act_windsurf_desc">Viento sostenido para planear.</p><small data-i18n="act_windsurf_factors">Viento, oleaje, visibilidad y viento offshore.</small></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">🪁🪂</div><h3 data-i18n="act_kite_name">Kite Surf</h3><p data-i18n="act_kite_desc">Viento constante y espacio libre.</p><small data-i18n="act_kite_factors">Viento, oleaje y visibilidad.</small></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">🤿</div><h3 data-i18n="act_buceo_name">Buceo</h3><p data-i18n="act_buceo_desc">Mar en calma y superficie tranquila.</p><small data-i18n="act_buceo_factors">Viento y oleaje. La claridad del agua no se mide aquí.</small></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">🏊</div><h3 data-i18n="act_snorkel_name">Snorkel</h3><p data-i18n="act_snorkel_desc">Agua tranquila y poco oleaje.</p><small data-i18n="act_snorkel_factors">Viento, oleaje y visibilidad.</small></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">🪂</div><h3 data-i18n="act_hydrofoil_name">Hydrofoil</h3><p data-i18n="act_hydrofoil_desc">Agua plana y viento estable.</p><small data-i18n="act_hydrofoil_factors">Viento y oleaje.</small></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section" id="rutas" aria-labelledby="routesTitle">
+    <h2 id="routesTitle" data-i18n="routes_title">Tus próximos puntos de partida</h2>
+    <p class="lp-sub" data-i18n="routes_text">Organiza tus rutas, guarda tus caladeros favoritos y consulta los puntos compartidos por la comunidad autorizada.</p>
+    <div class="lp-cards">
+      <article class="lp-card"><span class="lp-tag" data-i18n="demo_tag">Demostración</span><h3 data-i18n="route_ex1_name">Ruta de ejemplo: Paddle Surf</h3><p data-i18n="route_ex1_desc">Punto de salida, enlace a Google Maps y notas de acceso.</p></article>
+      <article class="lp-card"><span class="lp-tag" data-i18n="demo_tag">Demostración</span><h3 data-i18n="route_ex2_name">Ruta de ejemplo: Snorkel</h3><p data-i18n="route_ex2_desc">Caladeros guardados y condiciones preferidas.</p></article>
+    </div>
+    <p class="lp-sub" style="margin-top:1.5rem" data-i18n="routes_disc">Las rutas no son navegación certificada. No garantizamos que los puntos de salida estén autorizados o sean seguros.</p>
+  </section>
+
+  <section class="lp-band" aria-labelledby="advTitle">
+    <div class="lp-section">
+      <h2 id="advTitle" data-i18n="adv_title">Ventajas</h2>
+      <div class="lp-cards" style="margin-top:1.5rem">
+        <article class="lp-card"><div class="ic" aria-hidden="true">🌊</div><p data-i18n="adv1">Previsión meteorológica y marina.</p></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">🎯</div><p data-i18n="adv2">Evaluación adaptada a cada actividad.</p></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">🕒</div><p data-i18n="adv3">Comparación de franjas horarias.</p></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">📍</div><p data-i18n="adv4">Playas y puntos de salida.</p></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">🗺️</div><p data-i18n="adv5">Rutas personales y compartidas.</p></article>
+        <article class="lp-card"><div class="ic" aria-hidden="true">🌐</div><p data-i18n="adv6">Interfaz en español e inglés.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section" id="beta" aria-labelledby="betaTitle">
+    <div class="lp-beta">
+      <h2 id="betaTitle" data-i18n="beta_title">Sé de los primeros en explorar Marine Monitor</h2>
+      <p class="lp-main" data-i18n="beta_main">Prueba en versión Beta gratis por tiempo limitado</p>
+      <p data-i18n="beta_sub">Solicita acceso y descubre una nueva forma de consultar las condiciones del Mediterráneo.</p>
+      <form id="betaForm" class="lp-form" novalidate>
+        <label><span data-i18n="form_name">Nombre</span><input name="nombre" type="text" autocomplete="given-name" required /></label>
+        <label><span data-i18n="form_surname">Apellidos</span><input name="apellidos" type="text" autocomplete="family-name" required /></label>
+        <label><span data-i18n="form_phone">Móvil</span><input name="movil" type="tel" autocomplete="tel" required /></label>
+        <label><span data-i18n="form_email">Email</span><input name="email" type="email" autocomplete="email" required /></label>
+        <label class="full check"><input name="privacidad" type="checkbox" required /><span data-i18n="form_privacy">He leído y acepto la política de privacidad.</span></label>
+        <div class="full">
+          <button class="lp-btn accent" id="betaSubmit" type="submit" disabled data-i18n="form_submit">Solicitar acceso beta</button>
+          <p class="lp-msg" id="betaMsg" role="status" data-i18n="form_pending">El envío de solicitudes todavía no está configurado.</p>
+          <p class="lp-pending" data-i18n="form_info">El acceso requiere aprobación; no es inmediato.</p>
+        </div>
+      </form>
+      <p class="lp-msg" id="loginMsg" role="status"></p>
+    </div>
+  </section>
+
+  <footer class="lp-footer">
+    <div class="lp-footer-grid">
+      <div>
+        <strong>Marine Monitor</strong>
+        <p data-i18n="footer_desc">Información meteorológica y marina para deportes acuáticos en el Mediterráneo.</p>
+        <p class="lp-pending" data-i18n="footer_sources">Fuentes meteorológicas: Open-Meteo</p>
+      </div>
+      <ul>
+        <li><a href="#funciones" data-i18n="nav_features">Funcionalidades</a></li>
+        <li><a href="#actividades" data-i18n="nav_activities">Actividades</a></li>
+        <li><a href="#app" data-i18n="cta_explore">Explorar Marine Monitor</a></li>
+        <li><a href="#beta" data-i18n="cta_beta">Solicitar acceso beta</a></li>
+      </ul>
+      <ul>
+        <li><span data-i18n="footer_legal">Aviso legal</span> <span class="lp-pending" data-i18n="legal_pending">Texto pendiente de revisión legal.</span></li>
+        <li><span data-i18n="footer_terms">Condiciones de uso</span></li>
+        <li><span data-i18n="footer_privacy">Política de privacidad</span></li>
+        <li><span data-i18n="footer_cookies">Política de cookies</span></li>
+        <li><span data-i18n="footer_contact">Contacto</span></li>
+      </ul>
+    </div>
+    <p class="warn" data-i18n="footer_warning">Las previsiones y recomendaciones son orientativas y no garantizan condiciones seguras. Comprueba siempre el estado real del mar y las alertas oficiales.</p>
+  </footer>
+</div>
   <div class="app">
 
     <!-- Header -->
+    <a class="lp-back" href="#" data-i18n="back_home">← Inicio</a>
     <header class="header">
       <div class="header-left">
         <div class="logo">
@@ -1524,6 +1775,141 @@
       initRangeSelect();
       initLaunchPoints();
     });
+  </script>
+  <script>
+    // === Landing: rutas por hash, idioma e interacciones (sin backend) ===
+    const LP_I18N = {
+      es: {
+        nav_features: 'Funcionalidades', nav_activities: 'Actividades', nav_routes: 'Rutas',
+        login: 'Iniciar sesión', cta_beta: 'Solicitar acceso beta', cta_explore: 'Explorar Marine Monitor',
+        hero_eyebrow: 'Costa mediterránea · Previsión marina',
+        hero_title: 'El mar, en el momento adecuado',
+        hero_sub: 'Descubre las mejores ventanas meteorológicas para tus actividades acuáticas. Consulta el viento, el oleaje y las condiciones previstas antes de preparar tu próxima salida.',
+        hero_note: 'Diseñado para explorar y disfrutar del Mediterráneo con más información.',
+        demo_tag: 'Demostración', demo_wind: 'Viento', demo_wave: 'Altura de ola', demo_period: 'Periodo', demo_activity: 'Actividad',
+        med_title: 'Cada salida empieza mucho antes de entrar al agua',
+        med_text: 'El viento, el oleaje y la orientación de la costa pueden transformar una jornada. Marine Monitor reúne información meteorológica y marina para ayudarte a comparar condiciones y planificar tus actividades.',
+        med_link: 'Ver las funcionalidades del dashboard',
+        window_title: 'Encuentra tu ventana', window_sub: 'Cómo funciona el motor de evaluación.',
+        step1: 'Selecciona una actividad.', step2: 'Elige una playa o punto de salida.', step3: 'Consulta el viento y el oleaje.',
+        step4: 'Compara las franjas horarias.', step5: 'Revisa las condiciones y sus limitaciones.',
+        demo_caption: 'Ilustración sin datos reales.',
+        window_disclaimer: 'Las recomendaciones son orientativas y dependen de la disponibilidad y calidad de los datos.',
+        act_title: 'Actividades', act_sub: 'Cada deporte tiene sus propios factores. Los criterios son orientativos.',
+        act_paddle_name: 'Paddle Surf', act_paddle_desc: 'Viento suave, oleaje corto y buena visibilidad.', act_paddle_factors: 'Viento, oleaje, visibilidad y viento offshore.',
+        act_windsurf_name: 'Windsurf', act_windsurf_desc: 'Viento sostenido para planear.', act_windsurf_factors: 'Viento, oleaje, visibilidad y viento offshore.',
+        act_kite_name: 'Kite Surf', act_kite_desc: 'Viento constante y espacio libre.', act_kite_factors: 'Viento, oleaje y visibilidad.',
+        act_buceo_name: 'Buceo', act_buceo_desc: 'Mar en calma y superficie tranquila.', act_buceo_factors: 'Viento y oleaje. La claridad del agua no se mide aquí.',
+        act_snorkel_name: 'Snorkel', act_snorkel_desc: 'Agua tranquila y poco oleaje.', act_snorkel_factors: 'Viento, oleaje y visibilidad.',
+        act_hydrofoil_name: 'Hydrofoil', act_hydrofoil_desc: 'Agua plana y viento estable.', act_hydrofoil_factors: 'Viento y oleaje.',
+        routes_title: 'Tus próximos puntos de partida',
+        routes_text: 'Organiza tus rutas, guarda tus caladeros favoritos y consulta los puntos compartidos por la comunidad autorizada.',
+        route_ex1_name: 'Ruta de ejemplo: Paddle Surf', route_ex1_desc: 'Punto de salida, enlace a Google Maps y notas de acceso.',
+        route_ex2_name: 'Ruta de ejemplo: Snorkel', route_ex2_desc: 'Caladeros guardados y condiciones preferidas.',
+        routes_disc: 'Las rutas no son navegación certificada. No garantizamos que los puntos de salida estén autorizados o sean seguros.',
+        adv_title: 'Ventajas', adv1: 'Previsión meteorológica y marina.', adv2: 'Evaluación adaptada a cada actividad.', adv3: 'Comparación de franjas horarias.',
+        adv4: 'Playas y puntos de salida.', adv5: 'Rutas personales y compartidas.', adv6: 'Interfaz en español e inglés.',
+        beta_title: 'Sé de los primeros en explorar Marine Monitor', beta_main: 'Prueba en versión Beta gratis por tiempo limitado',
+        beta_sub: 'Solicita acceso y descubre una nueva forma de consultar las condiciones del Mediterráneo antes de tu próxima salida.',
+        form_name: 'Nombre', form_surname: 'Apellidos', form_phone: 'Móvil', form_email: 'Email',
+        form_privacy: 'He leído y acepto la política de privacidad.', form_submit: 'Solicitar acceso beta',
+        form_pending: 'El envío de solicitudes todavía no está configurado, así que no es posible enviarla. No se mostrará confirmación hasta que el registro se complete.',
+        form_info: 'El acceso requiere aprobación; no es inmediato.',
+        login_pending: 'El inicio de sesión todavía no está configurado.',
+        footer_desc: 'Información meteorológica y marina para deportes acuáticos en el Mediterráneo.',
+        footer_sources: 'Fuentes meteorológicas: Open-Meteo',
+        footer_legal: 'Aviso legal', footer_terms: 'Condiciones de uso', footer_privacy: 'Política de privacidad',
+        footer_cookies: 'Política de cookies', footer_contact: 'Contacto',
+        legal_pending: 'Texto pendiente de revisión legal.',
+        footer_warning: 'Las previsiones y recomendaciones son orientativas y no garantizan condiciones seguras. Comprueba siempre el estado real del mar y las alertas oficiales.',
+        back_home: '← Inicio'
+      },
+      en: {
+        nav_features: 'Features', nav_activities: 'Activities', nav_routes: 'Routes',
+        login: 'Log in', cta_beta: 'Request beta access', cta_explore: 'Explore Marine Monitor',
+        hero_eyebrow: 'Mediterranean coast · Marine forecast',
+        hero_title: 'The sea, at the right moment',
+        hero_sub: 'Discover the best weather windows for your water activities. Check wind, swell and forecast conditions before planning your next trip.',
+        hero_note: 'Designed to explore and enjoy the Mediterranean with more information.',
+        demo_tag: 'Demo', demo_wind: 'Wind', demo_wave: 'Wave height', demo_period: 'Period', demo_activity: 'Activity',
+        med_title: 'Every trip starts long before you enter the water',
+        med_text: 'Wind, swell and the orientation of the coast can change a whole day. Marine Monitor brings together weather and marine information to help you compare conditions and plan your activities.',
+        med_link: 'See the dashboard features',
+        window_title: 'Find your window', window_sub: 'How the evaluation engine works.',
+        step1: 'Select an activity.', step2: 'Choose a beach or launch point.', step3: 'Check wind and swell.',
+        step4: 'Compare time windows.', step5: 'Review conditions and their limits.',
+        demo_caption: 'Illustration, not real data.',
+        window_disclaimer: 'Recommendations are indicative and depend on data availability and quality.',
+        act_title: 'Activities', act_sub: 'Each sport has its own factors. The criteria are guidelines.',
+        act_paddle_name: 'Paddle Surf', act_paddle_desc: 'Light wind, short swell and good visibility.', act_paddle_factors: 'Wind, swell, visibility and offshore wind.',
+        act_windsurf_name: 'Windsurf', act_windsurf_desc: 'Steady wind for planing.', act_windsurf_factors: 'Wind, swell, visibility and offshore wind.',
+        act_kite_name: 'Kite Surf', act_kite_desc: 'Steady wind and open space.', act_kite_factors: 'Wind, swell and visibility.',
+        act_buceo_name: 'Diving', act_buceo_desc: 'Calm sea and a quiet surface.', act_buceo_factors: 'Wind and swell. Water clarity is not measured here.',
+        act_snorkel_name: 'Snorkel', act_snorkel_desc: 'Calm water and little swell.', act_snorkel_factors: 'Wind, swell and visibility.',
+        act_hydrofoil_name: 'Hydrofoil', act_hydrofoil_desc: 'Flat water and steady wind.', act_hydrofoil_factors: 'Wind and swell.',
+        routes_title: 'Your next starting points',
+        routes_text: 'Organise your routes, save favourite launch spots and view points shared by the authorised community.',
+        route_ex1_name: 'Example route: Paddle Surf', route_ex1_desc: 'Launch point, Google Maps link and access notes.',
+        route_ex2_name: 'Example route: Snorkel', route_ex2_desc: 'Saved launch spots and preferred conditions.',
+        routes_disc: 'Routes are not certified navigation. We do not guarantee that launch points are authorised or safe.',
+        adv_title: 'Advantages', adv1: 'Weather and marine forecast.', adv2: 'Evaluation adapted to each activity.', adv3: 'Comparison of time windows.',
+        adv4: 'Beaches and launch points.', adv5: 'Personal and shared routes.', adv6: 'Interface in Spanish and English.',
+        beta_title: 'Be among the first to explore Marine Monitor', beta_main: 'Try the beta for free for a limited time',
+        beta_sub: 'Request access and discover a new way to check Mediterranean conditions.',
+        form_name: 'First name', form_surname: 'Last name', form_phone: 'Mobile', form_email: 'Email',
+        form_privacy: 'I have read and accept the privacy policy.', form_submit: 'Request beta access',
+        form_pending: 'Request submission is not configured yet, so it cannot be sent. No confirmation will be shown until registration is complete.',
+        form_info: 'Access requires approval; it is not immediate.',
+        login_pending: 'Log-in is not configured yet.',
+        footer_desc: 'Weather and marine information for water sports in the Mediterranean.',
+        footer_sources: 'Weather sources: Open-Meteo',
+        footer_legal: 'Legal notice', footer_terms: 'Terms of use', footer_privacy: 'Privacy policy',
+        footer_cookies: 'Cookie policy', footer_contact: 'Contact',
+        legal_pending: 'Text pending legal review.',
+        footer_warning: 'Forecasts and recommendations are indicative and do not guarantee safe conditions. Always check the actual sea state and official warnings.',
+        back_home: '← Home'
+      }
+    };
+
+    let lpLang = 'es';
+    try { lpLang = localStorage.getItem('mm.lang') === 'en' ? 'en' : 'es'; } catch (e) {}
+
+    function applyLang(l) {
+      lpLang = l === 'en' ? 'en' : 'es';
+      document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const v = LP_I18N[lpLang][el.getAttribute('data-i18n')];
+        if (v !== undefined) el.textContent = v;
+      });
+      document.querySelectorAll('[data-lang]').forEach((b) => {
+        b.setAttribute('aria-pressed', String(b.dataset.lang === lpLang));
+      });
+      try { localStorage.setItem('mm.lang', lpLang); } catch (e) {}
+    }
+
+    function routeView() {
+      const isApp = location.hash === '#app';
+      document.body.classList.toggle('view-app', isApp);
+      document.body.classList.toggle('view-landing', !isApp);
+      if (isApp) window.dispatchEvent(new Event('resize')); // Chart.js recalcula tamaño al mostrarse
+    }
+
+    document.querySelectorAll('[data-lang]').forEach((b) => {
+      b.addEventListener('click', () => applyLang(b.dataset.lang));
+    });
+
+    document.getElementById('lpLoginBtn').addEventListener('click', () => {
+      document.getElementById('loginMsg').textContent = LP_I18N[lpLang].login_pending;
+    });
+
+    document.getElementById('betaForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Sin backend configurado no se envía nada ni se muestra confirmación
+      document.getElementById('betaMsg').textContent = LP_I18N[lpLang].form_pending;
+    });
+
+    window.addEventListener('hashchange', routeView);
+    applyLang(lpLang);
+    routeView();
   </script>
   <script>
     // Registro del service worker (solo cuando la página se sirve por http/https)
